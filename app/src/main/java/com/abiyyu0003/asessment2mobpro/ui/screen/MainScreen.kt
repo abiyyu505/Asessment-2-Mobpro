@@ -1,6 +1,5 @@
-package com.abiyyu0003.mobpro1.ui.screen
+package com.abiyyu0003.asessment2mobpro.ui.screen
 
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,13 +22,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.abiyyu0003.asessment2mobpro.R
 import com.abiyyu0003.asessment2mobpro.model.Catatan
-import com.abiyyu0003.asessment2mobpro.ui.screen.MainViewModel
+import com.abiyyu0003.asessment2mobpro.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(navController: NavHostController) {
     val context = LocalContext.current
 
     Scaffold(
@@ -42,8 +42,7 @@ fun MainScreen() {
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {
-                    Toast.makeText(context, R.string.tambah_catatan, Toast.LENGTH_SHORT).show()
+                onClick = { navController.navigate(Screen.FormBaru.route)
                 }
             ) {
                 Icon(
@@ -53,12 +52,12 @@ fun MainScreen() {
             }
         }
     ) { innerPadding ->
-        ScreenContent(Modifier.padding(innerPadding))
+        ScreenContent(navController, Modifier.padding(innerPadding))
     }
 }
 
 @Composable
-fun ScreenContent(modifier: Modifier = Modifier) {
+fun ScreenContent(navController: NavHostController, modifier: Modifier = Modifier) {
     val viewModel: MainViewModel = viewModel()
     val data = viewModel.data
     val context = LocalContext.current
@@ -75,7 +74,7 @@ fun ScreenContent(modifier: Modifier = Modifier) {
         ) {
             items(data) { catatan ->
                 ListItem(catatan = catatan) {
-                    Toast.makeText(context, catatan.judul_materi, Toast.LENGTH_SHORT).show()
+                    navController.navigate(Screen.FormUbah.withId(catatan.id))
                 }
                 HorizontalDivider()
             }
@@ -84,10 +83,7 @@ fun ScreenContent(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ListItem(
-    catatan: Catatan,
-    onClick: () -> Unit
-) {
+fun ListItem(catatan: Catatan, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .clickable { onClick() }
