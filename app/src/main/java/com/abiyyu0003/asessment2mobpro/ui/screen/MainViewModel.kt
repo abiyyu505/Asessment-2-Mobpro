@@ -1,40 +1,18 @@
 package com.abiyyu0003.asessment2mobpro.ui.screen
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.abiyyu0003.asessment2mobpro.database.CatatanDao
 import com.abiyyu0003.asessment2mobpro.model.Catatan
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 
-class MainViewModel : ViewModel() {
+class MainViewModel(dao: CatatanDao) : ViewModel() {
 
-    val data = listOf(
-        Catatan(
-            id = 1L,
-            judul_materi = "Mobpro - Day 1",
-            isi_materi = "Perkenalan dengan dosen pengampu dan mata kuliah mobpro",
-            tanggal = "1 Mei 2026"
-        ),
-        Catatan(
-            id = 2L,
-            judul_materi = "Mobpro - Day 2",
-            isi_materi = "Build Your First App",
-            tanggal = "7 Mei 2026"
-        ),
-        Catatan(
-            id = 3L,
-            judul_materi = "Mobpro - Day 3",
-            isi_materi = "Working with images",
-            tanggal = "13 Mei 2026"
-        ),
-        Catatan(
-            id = 4L,
-            judul_materi = "Mobpro - Day 4",
-            isi_materi = "Get User Input",
-            tanggal = "19 Mei 2026"
-        ),
-        Catatan(
-            id = 5L,
-            judul_materi = "Mobpro - Day 5",
-            isi_materi = "App Navigation",
-            tanggal = "25 Mei 2026"
-        )
+    val data: StateFlow<List<Catatan>> = dao.getCatatan().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList()
     )
 }
