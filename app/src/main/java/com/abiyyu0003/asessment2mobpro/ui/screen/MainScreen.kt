@@ -28,6 +28,9 @@ import com.abiyyu0003.asessment2mobpro.model.Catatan
 import com.abiyyu0003.asessment2mobpro.navigation.Screen
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.abiyyu0003.asessment2mobpro.database.CatatanDb
 import com.abiyyu0003.asessment2mobpro.util.ViewModelFactory
 
@@ -35,6 +38,7 @@ import com.abiyyu0003.asessment2mobpro.util.ViewModelFactory
 @Composable
 fun MainScreen(navController: NavHostController) {
     val context = LocalContext.current
+    var showList by remember { mutableStateOf(true) }
 
     Scaffold(
         topBar = {

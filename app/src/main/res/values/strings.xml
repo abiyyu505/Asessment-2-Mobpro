@@ -14,4 +14,7 @@
     <string name="tombol_hapus">Hapus</string>
     <string name="tombol_batal">Batal</string>
     <string name="hapus_pesan">Apakah catatan ini ingin dihapus?</string>
+
+    <string name="list_view">Tampilan list</string>
+    <string name="grid_view">Tampilan grid</string>
 </resources>
