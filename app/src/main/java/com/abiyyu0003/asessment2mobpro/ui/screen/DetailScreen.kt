@@ -21,6 +21,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.abiyyu0003.asessment2mobpro.R
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.platform.LocalContext
+import com.abiyyu0003.asessment2mobpro.database.CatatanDb
+import com.abiyyu0003.asessment2mobpro.util.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,6 +34,10 @@ fun DetailScreen(
 ) {
     val judul = remember { mutableStateOf("") }
     val isi = remember { mutableStateOf("") }
+    val context = LocalContext.current
+    val db = CatatanDb.getInstance(context)
+    val factory = ViewModelFactory(db.dao)
+    val viewModel: DetailViewModel = viewModel(factory = factory)
 
     Scaffold(
         topBar = {
@@ -58,7 +66,14 @@ fun DetailScreen(
                 actions = {
                     IconButton(
                         onClick = {
-                            navController.popBackStack()
+                            if (judul.value.isNotBlank() && isi.value.isNotBlank()) {
+                                if (id == 0L) {
+                                    viewModel.insert(judul.value, isi.value)
+                                } else {
+                                    viewModel.update(id, judul.value, isi.value)
+                                }
+                                navController.popBackStack()
+                            }
                         }
                     ) {
                         Icon(

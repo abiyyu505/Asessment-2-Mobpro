@@ -26,6 +26,10 @@ import androidx.navigation.NavHostController
 import com.abiyyu0003.asessment2mobpro.R
 import com.abiyyu0003.asessment2mobpro.model.Catatan
 import com.abiyyu0003.asessment2mobpro.navigation.Screen
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import com.abiyyu0003.asessment2mobpro.database.CatatanDb
+import com.abiyyu0003.asessment2mobpro.util.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,15 +56,18 @@ fun MainScreen(navController: NavHostController) {
             }
         }
     ) { innerPadding ->
-        ScreenContent(navController, Modifier.padding(innerPadding))
+        ScreenContent(
+            modifier = Modifier.padding(innerPadding), navController = navController)
     }
 }
 
 @Composable
-fun ScreenContent(navController: NavHostController, modifier: Modifier = Modifier) {
-    val viewModel: MainViewModel = viewModel()
-    val data = viewModel.data
+fun ScreenContent(modifier: Modifier = Modifier, navController: NavHostController) {
     val context = LocalContext.current
+    val db = CatatanDb.getInstance(context)
+    val factory = ViewModelFactory(db.dao)
+    val viewModel: MainViewModel = viewModel(factory = factory)
+    val data by viewModel.data.collectAsState()
 
     if (data.isEmpty()) {
         Text(
