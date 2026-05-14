@@ -10,4 +10,8 @@
     <string name="isi_materi">Isi materi</string>
     <string name="tombol_simpan">Simpan</string>
     <string name="tombol_kembali">Kembali</string>
+
+    <string name="tombol_hapus">Hapus</string>
+    <string name="tombol_batal">Batal</string>
+    <string name="hapus_pesan">Apakah catatan ini ingin dihapus?</string>
 </resources>
