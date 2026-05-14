@@ -25,19 +25,25 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.platform.LocalContext
 import com.abiyyu0003.asessment2mobpro.database.CatatanDb
 import com.abiyyu0003.asessment2mobpro.util.ViewModelFactory
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen(
-    navController: NavHostController,
-    id: Long = 0L
-) {
+fun DetailScreen(navController: NavHostController, id: Long = 0L) {
+
     val judul = remember { mutableStateOf("") }
     val isi = remember { mutableStateOf("") }
     val context = LocalContext.current
     val db = CatatanDb.getInstance(context)
     val factory = ViewModelFactory(db.dao)
     val viewModel: DetailViewModel = viewModel(factory = factory)
+
+    var expanded by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -84,6 +90,7 @@ fun DetailScreen(
                 }
             )
         }
+
     ) { innerPadding ->
         FormCatatan(
             title = judul.value,
@@ -93,7 +100,20 @@ fun DetailScreen(
             modifier = Modifier.padding(innerPadding)
         )
     }
+    if (showDialog) {
+        DisplayAlertDialog(
+            onDismissRequest = {
+                showDialog = false
+            },
+            onConfirmation = {
+                showDialog = false
+                viewModel.delete(id)
+                navController.popBackStack()
+            }
+        )
+    }
 }
+
 
 @Composable
 fun FormCatatan(
